@@ -13,7 +13,7 @@ Resources:
             Ref: CognitoUserPoolClient
           ProviderName:
             Fn::GetAtt: [ "CognitoUserPool", "ProviderName" ]
-            
+
   # IAM roles
   CognitoIdentityPoolRoles:
     Type: AWS::Cognito::IdentityPoolRoleAttachment
@@ -23,7 +23,7 @@ Resources:
       Roles:
         authenticated:
           Fn::GetAtt: [CognitoAuthRole, Arn]
-          
+
   # IAM role used for authenticated users
   CognitoAuthRole:
     Type: AWS::IAM::Role
@@ -54,7 +54,7 @@ Resources:
                   - 'cognito-sync:*'
                   - 'cognito-identity:*'
                 Resource: '*'
-              
+
               # Allow users to invoke our API
               - Effect: 'Allow'
                 Action:
@@ -70,21 +70,7 @@ Resources:
                       - ':'
                       - Ref: ApiGatewayRestApi
                       - '/*'
-              
-              # Allow users to upload attachments to their
-              # folder inside our S3 bucket
-              - Effect: 'Allow'
-                Action:
-                  - 's3:*'
-                Resource:
-                  - Fn::Join:
-                    - ''
-                    -
-                      - Fn::GetAtt: [AttachmentsBucket, Arn]
-                      - '/private/'
-                      - '$'
-                      - '{cognito-identity.amazonaws.com:sub}/*'
-  
+
 # Print out the Id of the Identity Pool that is created
 Outputs:
   IdentityPoolId:
